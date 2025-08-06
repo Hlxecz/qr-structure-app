@@ -22,7 +22,7 @@ export default function WritePage({ onSubmit }) {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/answers", {
+      const response = await fetch("http://3.27.190.251:8080/api/answers", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

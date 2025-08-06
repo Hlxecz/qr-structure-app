@@ -36,6 +36,11 @@ public class AnswerController {
                 ))
                 .toList();
 
+        List<Answer> all = answerRepository.findAll();
+        for (Answer a : all) {
+            System.out.println("👉 " + a.getId() + ", " + a.getKeyword() + ", " + a.getWall() + ", " + a.getStructureColumn() + ", " + a.getSlab());
+        }
+
         return ResponseEntity.ok(summaries);
     }
 

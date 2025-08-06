@@ -14,7 +14,7 @@ public class webconfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // 모든 경로에 대해
-                        .allowedOrigins("http://localhost:5173") // 프론트 주소
+                        .allowedOrigins("http://localhost:5173, http://3.27.190.251:8080") // 프론트 주소
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
                         .allowCredentials(true);
