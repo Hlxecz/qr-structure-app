@@ -6,7 +6,7 @@ const QrCode = () => {
   useEffect(() => {
     if (qrRef.current && window.QRCode) {
       new window.QRCode(qrRef.current, {
-        text: 'https://example.com',
+        text: 'https://architen.netlify.app/',
         width: 150,
         height: 150,
       });
@@ -15,6 +15,5 @@ const QrCode = () => {
 
   return <div ref={qrRef} />;
 };
-
 
 export default QrCode;
