@@ -1,6 +1,5 @@
 package com.qrproject.backend.controller;
 
-import com.qrproject.backend.dto.AnswerDetailDto;
 import com.qrproject.backend.dto.AnswerSummaryDto;
 import com.qrproject.backend.entity.Answer;
 import com.qrproject.backend.repository.AnswerRepository;
@@ -23,29 +22,22 @@ public class AnswerController {
         return ResponseEntity.ok(answerRepository.save(answer));
     }
 
-
-    @GetMapping("/{id}/detail")
-    public ResponseEntity<AnswerDetailDto> getDetailById(@PathVariable Long id) {
-        return answerRepository.findById(id)
-                .map(answer -> new AnswerDetailDto(
-                        answer.getWall(),
-                        answer.getStructureColumn(),
-                        answer.getSlab()
-                ))
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
+    // ✅ 간단 + 상세정보 포함된 목록
     @GetMapping("/summaries")
     public ResponseEntity<List<AnswerSummaryDto>> getAllSummaries() {
         List<AnswerSummaryDto> summaries = answerRepository.findAll()
                 .stream()
-                .map(answer -> new AnswerSummaryDto(answer.getId(), answer.getKeyword()))
+                .map(answer -> new AnswerSummaryDto(
+                        answer.getId(),
+                        answer.getKeyword(),
+                        answer.getWall(),
+                        answer.getStructureColumn(),
+                        answer.getSlab()
+                ))
                 .toList();
 
         return ResponseEntity.ok(summaries);
     }
-
 
     // ✅ 글 개수 반환
     @GetMapping("/count")
