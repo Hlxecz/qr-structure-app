@@ -74,7 +74,7 @@ export default function WritePage({ onSubmit }) {
             <h2 className="h4 fw-semibold text-white">
                 <span className="text-primary">벽</span> /{" "}
                 <span className="text-danger">기둥</span> /{" "}
-                <span className="text-success">슬라브</span>를 어떻게 이용하였나요?
+                <span className="text-success">바닥</span>를 어떻게 이용하였나요?
             </h2>
           </div>
 
@@ -101,7 +101,7 @@ export default function WritePage({ onSubmit }) {
               <textarea
                 className="form-control"
                 rows={5}
-                placeholder="슬라브를 어떻게 활용했나요?"
+                placeholder="바닥을 어떻게 활용했나요?"
                 value={slabAnswer}
                 onChange={(e) => setSlabAnswer(e.target.value)}
               />

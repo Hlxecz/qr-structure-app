@@ -28,7 +28,7 @@ export default function StartPage() {
 
 <p className="text-white text-lg leading-relaxed mb-10">
   QR로 접속하여 질문에 답하고<br />
-  벽/기둥/슬라브 아이디어를 공유해보세요!
+  벽/기둥/바닥 아이디어를 공유해보세요!
 </p>
             <button
               onClick={() => writeRef.current?.scrollIntoView({ behavior: "smooth" })}
