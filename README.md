@@ -100,15 +100,15 @@ ls /var/www/html
 
 <details> <summary>🌐 DuckDNS 연결 안 됨</summary>
 
-✅ 문제 요약
+### ✅ 문제 요약 
 DuckDNS 서브도메인 주소로 접속이 되지 않음
 
-🧾 원인
+### 🧾 원인 
 DuckDNS에 현재 내 서버의 공인 IP가 등록되지 않았음
 
 IP 갱신 스크립트(duck.sh)가 실행되지 않거나 crontab 등록이 잘못됨
 
-🛠️ 해결 방법
+### 🛠️ 해결 방법
 
 ```bash
 
@@ -128,17 +128,18 @@ chmod 700 ~/duckdns/duck.sh
 </details>
 
 <details> <summary>🔒 SSH 접속 안 됨</summary>
-✅ 문제 요약
+    
+### ✅ 문제 요약 
 ssh -i 명령어로 EC2에 접속할 때 Permission denied (publickey) 오류 발생
 
-🧾 원인
+### 🧾 원인 
 .pem 키 파일의 권한이 400 이하가 아님
 
 EC2 인스턴스의 사용자명을 잘못 입력함 (ec2-user, ubuntu 등)
 
 퍼블릭 IP가 변경되어 이전 주소를 접속 시도함
 
-🛠️ 해결 방법
+### 🛠️ 해결 방법
 ```bash
 
 1. 키 파일 권한 변경
@@ -150,8 +151,8 @@ chmod 400 your-key.pem
 ssh -i "your-key.pem" ubuntu@<EC2_PUBLIC_IP>
 
 3. EC2 콘솔에서 현재 퍼블릭 IP 확인 후 갱신
-</details> ```
-
+ ```
+</details>
 
 ## 📝 회고
 
