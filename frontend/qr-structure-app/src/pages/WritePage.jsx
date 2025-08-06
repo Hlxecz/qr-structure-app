@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
+const API_BASE_URL = "https://your-backend-domain.com"; // ← 실제 API 서버 주소로 바꿔주세요
+
 export default function WritePage({ onSubmit }) {
   const [firstAnswer, setFirstAnswer] = useState("");
   const [wallAnswer, setWallAnswer] = useState("");
@@ -22,24 +24,34 @@ export default function WritePage({ onSubmit }) {
     };
 
     try {
-      const response = await fetch("/api/answers", {
+      const url = `${API_BASE_URL}/api/answers`;
+      console.log("➡️ 요청 URL:", url);
+      console.log("📦 전송 데이터:", payload);
+
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
+        credentials: "include", // 필요 없으면 제거해도 됨
       });
 
       if (!response.ok) {
-        throw new Error("서버 응답 오류");
+        const errorText = await response.text();
+        console.error("❌ 서버 에러 응답:");
+        console.error("🔸 상태 코드:", response.status);
+        console.error("🔸 상태 메시지:", response.statusText);
+        console.error("🔸 응답 내용:", errorText);
+        throw new Error(`서버 응답 오류: ${response.status}`);
       }
 
       const result = await response.json();
-      console.log("전송 성공:", result);
-      onSubmit(); // ✅ 리스트로 전환
+      console.log("✅ 전송 성공:", result);
+      onSubmit();
     } catch (err) {
-      console.error("전송 실패:", err);
-      alert("전송 중 오류가 발생했습니다.");
+      console.error("❌ 전송 실패:", err.message);
+      alert(`오류 발생: ${err.message}`);
     }
   };
 
@@ -117,7 +129,6 @@ export default function WritePage({ onSubmit }) {
         </motion.div>
       )}
 
-      {/* Modal */}
       {showModal && (
         <div
           className="modal fade show d-block"
