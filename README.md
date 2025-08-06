@@ -40,7 +40,7 @@ chmod 400 your-key.pem
 # 2. EC2 인스턴스 SSH 접속
 ssh -i "your-key.pem" ubuntu@your-ec2-public-ip
 
-
+```
 ## ⚙️ Nginx 설정 예시
 
 ```bash
