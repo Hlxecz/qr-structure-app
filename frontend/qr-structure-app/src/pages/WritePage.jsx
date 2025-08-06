@@ -22,7 +22,7 @@ export default function WritePage({ onSubmit }) {
     };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/answers`, {
+      const response = await fetch("/api/answers", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
