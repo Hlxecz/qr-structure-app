@@ -4,6 +4,7 @@ import WritePage from "../pages/WritePage";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AnswerListPage from "../pages/AnswerListPage";
+import ipadImg from "../../assets/img/ipad.png";
 
 export default function StartPage() {
   const writeRef = useRef(null);
@@ -56,7 +57,7 @@ export default function StartPage() {
               )}
             </div>
           </div>
-          <img className="img-fluid mt-4" src="../src/assets/img/ipad.png" alt="..." />
+          <img src={ipadImg} alt="ipad" />
         </div>
       </section>
 
