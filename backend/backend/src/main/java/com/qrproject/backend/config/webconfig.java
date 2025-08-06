@@ -14,7 +14,7 @@ public class webconfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // 모든 경로에 대해
-                        .allowedOrigins("https://architen.netlify.app/**")
+                        .allowedOrigins("https://architen.netlify.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
                         .allowCredentials(true);
