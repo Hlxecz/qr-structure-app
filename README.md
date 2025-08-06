@@ -79,6 +79,7 @@ crontab -e
 
 ---
 <details> <summary>문제 상황</summary>
+    
 ### 🔒 1. HTTPS 접속 시 Mixed Content 오류
 
 #### ✅ 문제 상황
@@ -156,7 +157,7 @@ crontab -e
 - WordCloud처럼 의존성 충돌 문제는 버전 호환성이 핵심
 - 프록시 경로 문제는 자주 발생하므로 `nginx.conf` 설정 꼼꼼히 점검할 것
 
-</detail>
+</details>
 
 ## 📝 회고
 
