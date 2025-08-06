@@ -76,31 +76,84 @@ crontab -e
 */5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1
 ```
 ## 🐞 오류 정리 (토글 형식)
-<details> <summary>🚫 403 Forbidden on Nginx</summary>
-원인: 디렉토리 권한 문제
-    
-해결 
+
+<details>
+<summary>🚫 403 Forbidden on Nginx</summary>
+
+### ✅ 문제 요약  
+배포 후 EC2 퍼블릭 IP 또는 도메인으로 접속 시 `403 Forbidden` 에러가 발생
+
+### 🧾 원인  
+- Nginx가 제공할 디렉토리(`/var/www/html`)에 접근 권한이 없거나, index 파일이 존재하지 않을 경우
+
+### 🛠️ 해결 방법
 ```bash
+# 웹 루트 디렉토리에 권한 부여
 sudo chown -R www-data:www-data /var/www/html
 ```
-</details> <details> <summary>🌐 DuckDNS 연결 안 됨</summary>
-원인: 크론탭에 경로 잘못 입력 or 스크립트 오류
-해결:
-
-
-duck.sh 스크립트 직접 실행해보고 IP가 갱신되는지 확인
-
-crontab -e에서 정확한 경로 입력
-
-</details> <details> <summary>🔒 SSH 접속 안 됨</summary>
-원인: 권한 또는 사용자 설정 오류
-해결:
+또는 index.html 파일이 존재하는지 확인:
 
 ```bash
-chmod 400 your-key.pem
-ssh -i "your-key.pem" ubuntu@EC2-PUBLIC-IP
+ls /var/www/html
 ```
 </details>
-📝 회고
+
+<details> <summary>🌐 DuckDNS 연결 안 됨</summary>
+
+✅ 문제 요약
+DuckDNS 서브도메인 주소로 접속이 되지 않음
+
+🧾 원인
+DuckDNS에 현재 내 서버의 공인 IP가 등록되지 않았음
+
+IP 갱신 스크립트(duck.sh)가 실행되지 않거나 crontab 등록이 잘못됨
+
+🛠️ 해결 방법
+
+```bash
+
+1.먼저 스크립트를 수동 실행해서 제대로 동작하는지 확인
+bash ~/duckdns/duck.sh
+
+2. DuckDNS 웹사이트에서 "Last Updated" 시간이 바뀌었는지 확인
+
+3. crontab -e에 아래와 같은 스케줄이 들어갔는지 확인:
+
+*/5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1
+
+4. 파일 실행 권한도 확인
+
+chmod 700 ~/duckdns/duck.sh
+```
+</details>
+
+<details> <summary>🔒 SSH 접속 안 됨</summary>
+✅ 문제 요약
+ssh -i 명령어로 EC2에 접속할 때 Permission denied (publickey) 오류 발생
+
+🧾 원인
+.pem 키 파일의 권한이 400 이하가 아님
+
+EC2 인스턴스의 사용자명을 잘못 입력함 (ec2-user, ubuntu 등)
+
+퍼블릭 IP가 변경되어 이전 주소를 접속 시도함
+
+🛠️ 해결 방법
+```bash
+
+1. 키 파일 권한 변경
+
+chmod 400 your-key.pem
+
+2.올바른 사용자명 사용 (Ubuntu AMI 기준)
+
+ssh -i "your-key.pem" ubuntu@<EC2_PUBLIC_IP>
+
+3. EC2 콘솔에서 현재 퍼블릭 IP 확인 후 갱신
+</details> ```
+
+
+## 📝 회고
+
 Nginx, DuckDNS, EC2 모두 처음 다뤄보는 툴이었지만, 배포를 성공하면서 서버에 대한 자신감이 붙었다. 특히 Nginx 설정 파일과 퍼미션 이슈 해결을 통해 실전 감각이 생겼다.
 
