@@ -39,3 +39,22 @@ chmod 400 your-key.pem
 
 # 2. EC2 인스턴스 SSH 접속
 ssh -i "your-key.pem" ubuntu@your-ec2-public-ip
+
+
+## ⚙️ Nginx 설정 예시
+
+```bash
+server {
+    listen 80;
+    server_name your-subdomain.duckdns.org;
+
+    root /var/www/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+
+# 설정 파일 변경 후 반드시 reload
+sudo systemctl restart nginx
