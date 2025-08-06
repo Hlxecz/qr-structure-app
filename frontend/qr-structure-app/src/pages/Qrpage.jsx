@@ -7,7 +7,7 @@ const QrPage = () => {
     if (qrRef.current) {
       qrRef.current.innerHTML = "";
       new window.QRCode(qrRef.current, {
-        text: "https://www.naver.com",
+        text: "https://architen.netlify.app/",
         width: 200,
         height: 200,
       });
