@@ -75,84 +75,87 @@ crontab -e
 # 아래 내용 추가
 */5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1
 ```
-## 🐞 오류 정리 (토글 형식)
+## 🐞 오류 정리 및 해결 과정
 
-<details>
-<summary>🚫 403 Forbidden on Nginx</summary>
+---
 
-### ✅ 문제 요약  
-배포 후 EC2 퍼블릭 IP 또는 도메인으로 접속 시 `403 Forbidden` 에러가 발생
+### 🔒 1. HTTPS 접속 시 Mixed Content 오류
 
-### 🧾 원인  
-- Nginx가 제공할 디렉토리(`/var/www/html`)에 접근 권한이 없거나, index 파일이 존재하지 않을 경우
+#### ✅ 문제 상황
+- DuckDNS 도메인을 이용해 HTTPS 접속을 적용한 후, 콘솔에 다음과 같은 오류 메시지 발생:
+  ```
+  Mixed Content: The page was loaded over HTTPS, but requested an insecure resource...
+  ```
+- 메인 이미지가 로드되지 않음
 
-### 🛠️ 해결 방법
-```bash
-# 웹 루트 디렉토리에 권한 부여
-sudo chown -R www-data:www-data /var/www/html
-```
-또는 index.html 파일이 존재하는지 확인:
+#### 🧾 원인
+- 외부 리소스를 `http://`로 불러오고 있었음 (예: JS, CSS, 이미지)
+- 프록시 설정에서 도메인을 잘못 입력하여 이미지 경로 오류 발생
 
-```bash
-ls /var/www/html
-```
-</details>
+#### 🛠️ 해결 방법
+- **DuckDNS 도메인 + Certbot으로 Let’s Encrypt SSL 인증서 직접 발급**
+  ```bash
+  sudo apt install certbot python3-certbot-nginx
+  sudo certbot --nginx -d your-subdomain.duckdns.org
+  ```
+- HTML, JS에서 모든 `http://` → `https://`로 수정
+- Nginx 프록시 설정의 `proxy_pass` 도메인 주소를 **정확히 일치**시키도록 수정
+  ```nginx
+  proxy_pass http://localhost:3000;
+  ```
 
-<details> <summary>🌐 DuckDNS 연결 안 됨</summary>
+---
 
-### ✅ 문제 요약 
-DuckDNS 서브도메인 주소로 접속이 되지 않음
+### 🌀 2. WordCloud 라이브러리 오류 (버전 호환 문제)
 
-### 🧾 원인 
-DuckDNS에 현재 내 서버의 공인 IP가 등록되지 않았음
+#### ✅ 문제 상황
+- WordCloud 생성 시 `ImageColor.getrgb()` 관련 `TypeError` 발생
 
-IP 갱신 스크립트(duck.sh)가 실행되지 않거나 crontab 등록이 잘못됨
+#### 🧾 원인
+- WordCloud 최신 버전(1.9 이상)과 Pillow 최신 버전 간 API 호환 문제
+- WordCloud 1.9.x 이상에서 color_func 옵션에 대해 일부 내부 코드가 작동하지 않음
 
-### 🛠️ 해결 방법
+#### 🧪 시도한 방법 (모두 실패함)
+1. `generate()` 시 직접 색상 지정
+2. `color_func` 커스터마이징
+3. `ImageColor.getrgb()` 직접 오버라이딩
 
-```bash
+#### 🛠️ 해결 방법
+- WordCloud와 Pillow의 안정적인 조합으로 **버전 다운그레이드**
+  ```bash
+  pip uninstall wordcloud pillow
+  pip install wordcloud==1.8.1
+  pip install pillow==8.4.0
+  ```
 
-1.먼저 스크립트를 수동 실행해서 제대로 동작하는지 확인
-bash ~/duckdns/duck.sh
+---
 
-2. DuckDNS 웹사이트에서 "Last Updated" 시간이 바뀌었는지 확인
+### 🖼️ 3. 메인 이미지가 안 보이는 문제
 
-3. crontab -e에 아래와 같은 스케줄이 들어갔는지 확인:
+#### ✅ 문제 상황
+- 메인 페이지에서 상단 이미지나 섹션 이미지가 로드되지 않음
 
-*/5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1
+#### 🧾 원인
+- Nginx 프록시 설정 시 `proxy_pass`에 잘못된 주소가 설정되어 이미지 경로 오류 발생
 
-4. 파일 실행 권한도 확인
+#### 🛠️ 해결 방법
+- Nginx 설정 파일 내 proxy 대상 도메인과 포트를 정확히 지정
+  ```nginx
+  location /assets/ {
+      proxy_pass http://localhost:3000/assets/;
+  }
+  ```
 
-chmod 700 ~/duckdns/duck.sh
-```
-</details>
+- 클라이언트 사이드에서의 상대 경로도 `/` 누락되지 않도록 확인
 
-<details> <summary>🔒 SSH 접속 안 됨</summary>
-    
-### ✅ 문제 요약 
-ssh -i 명령어로 EC2에 접속할 때 Permission denied (publickey) 오류 발생
+---
 
-### 🧾 원인 
-.pem 키 파일의 권한이 400 이하가 아님
+### ✅ 총평
 
-EC2 인스턴스의 사용자명을 잘못 입력함 (ec2-user, ubuntu 등)
+- 직접 인증서를 발급받고 설정까지 하면서 HTTPS 배포 과정을 완전히 이해함
+- WordCloud처럼 의존성 충돌 문제는 버전 호환성이 핵심
+- 프록시 경로 문제는 자주 발생하므로 `nginx.conf` 설정 꼼꼼히 점검할 것
 
-퍼블릭 IP가 변경되어 이전 주소를 접속 시도함
-
-### 🛠️ 해결 방법
-```bash
-
-1. 키 파일 권한 변경
-
-chmod 400 your-key.pem
-
-2.올바른 사용자명 사용 (Ubuntu AMI 기준)
-
-ssh -i "your-key.pem" ubuntu@<EC2_PUBLIC_IP>
-
-3. EC2 콘솔에서 현재 퍼블릭 IP 확인 후 갱신
- ```
-</details>
 
 ## 📝 회고
 
