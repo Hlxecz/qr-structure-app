@@ -4,7 +4,7 @@ import WritePage from "../pages/WritePage";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AnswerListPage from "../pages/AnswerListPage";
-import ipadImg from "../../assets/img/ipad.png";
+import ipadImg from "../assets/img/ipad.png";
 
 export default function StartPage() {
   const writeRef = useRef(null);
