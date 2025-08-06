@@ -72,9 +72,9 @@ export default function WritePage({ onSubmit }) {
         >
           <div className="text-center mb-4">
             <h2 className="h4 fw-semibold text-white">
-              <span className="text-danger">벽</span> /{" "}
-              <span className="text-primary">기둥</span> /{" "}
-              <span className="text-warning">슬라브</span>를 어떻게 이용하였나요?
+                <span className="text-primary">벽</span> /{" "}
+                <span className="text-danger">기둥</span> /{" "}
+                <span className="text-success">슬라브</span>를 어떻게 이용하였나요?
             </h2>
           </div>
 
