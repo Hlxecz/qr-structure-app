@@ -4,11 +4,13 @@ import com.qrproject.backend.dto.AnswerSummaryDto;
 import com.qrproject.backend.entity.Answer;
 import com.qrproject.backend.repository.AnswerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/answers")
 @RequiredArgsConstructor
@@ -49,5 +51,17 @@ public class AnswerController {
     public ResponseEntity<Map<String, Long>> count() {
         long count = answerRepository.count();
         return ResponseEntity.ok(Map.of("count", count));
+    }
+
+    @GetMapping("/ready")
+    public String ready(){
+        log.debug("server is ready");
+        return "ready";
+    }
+
+    @PostMapping("/ready")
+    public String ready1(){
+        log.debug("server is ready");
+        return "ready";
     }
 }

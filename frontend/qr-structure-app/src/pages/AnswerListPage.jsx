@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
+
+const API_BASE = import.meta.env.VITE_API_URL;
 
 export default function AnswerListPage() {
   const [answers, setAnswers] = useState([]);
@@ -8,7 +10,7 @@ export default function AnswerListPage() {
 
   useEffect(() => {
     axios
-      .get("/api/answers/summaries")
+      .get(`${API_BASE}/api/answers/summaries`)
       .then((res) => {
         const sorted = res.data.sort((a, b) => b.id - a.id);
         setAnswers(sorted);
@@ -21,7 +23,6 @@ export default function AnswerListPage() {
 
   return (
     <div className="container py-5">
-      {/* ✅ 타이틀 애니메이션 */}
       <motion.h2
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -31,7 +32,6 @@ export default function AnswerListPage() {
         PLAY-CE (놀場)
       </motion.h2>
 
-      {/* ✅ 카드 목록 */}
       <div className="d-flex flex-wrap justify-content-center gap-4">
         {visibleAnswers.map((answer, i) => (
           <motion.div
@@ -60,7 +60,6 @@ export default function AnswerListPage() {
         ))}
       </div>
 
-      {/* 더 보기 버튼 */}
       {hasMore && (
         <div className="text-center mt-5">
           <button
@@ -72,7 +71,6 @@ export default function AnswerListPage() {
         </div>
       )}
 
-      {/* 돌아가기 버튼 */}
       <div className="text-center mt-3">
         <button
           onClick={() => (window.location.href = "/")}
