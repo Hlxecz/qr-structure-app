@@ -7,6 +7,7 @@
 - HTML5, CSS3
 - Bootstrap 5.2.3
 - JavaScript
+- Spring Boot
 - AWS EC2 (Ubuntu 20.04)
 - Nginx
 - DuckDNS (도메인)
