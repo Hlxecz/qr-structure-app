@@ -28,7 +28,7 @@
 
 ## 🌐 접속 주소
 
-👉 [http://your-subdomain.duckdns.org](https://architen.netlify.app/)
+👉 https://architen.netlify.app/
 
 ---
 
