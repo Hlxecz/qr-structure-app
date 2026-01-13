@@ -81,7 +81,7 @@ crontab -e
 ---
 <details> <summary>문제 상황</summary>
     
-### 🔒 1. HTTPS 접속 시 Mixed Content 오류
+### 🔒 1. HTTPS 접속 시 Mixed Content 오류 (외부 리소스는 반드시 https 통일)
 
 #### ✅ 문제 상황
 - DuckDNS 도메인을 이용해 HTTPS 접속을 적용한 후, 콘솔에 다음과 같은 오류 메시지 발생:
@@ -108,7 +108,7 @@ crontab -e
 
 ---
 
-### 🌀 2. WordCloud 라이브러리 오류 (버전 호환 문제)
+### 🌀 2. WordCloud 라이브러리 오류 (버전 호환 문제 - 의존성은 ‘최신’보다 ‘호환 조합’이 우선)
 
 #### ✅ 문제 상황
 - WordCloud 생성 시 `ImageColor.getrgb()` 관련 `TypeError` 발생
@@ -132,7 +132,7 @@ crontab -e
 
 ---
 
-### 🖼️ 3. 메인 이미지가 안 보이는 문제
+### 🖼️ 3. 메인 이미지가 안 보이는 문제 (정적 파일/asset 경로는 location 분리로 안정화)
 
 #### ✅ 문제 상황
 - 메인 페이지에서 상단 이미지나 섹션 이미지가 로드되지 않음
